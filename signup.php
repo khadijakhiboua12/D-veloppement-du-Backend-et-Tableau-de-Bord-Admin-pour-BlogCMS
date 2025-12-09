@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <title>DarkPan - Bootstrap 5 Admin Template</title>
@@ -32,7 +31,7 @@
 </head>
 
 <body>
-    <div class="container-fluid position-relative d-flex p-0">
+       <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -41,9 +40,79 @@
         </div>
         <!-- Spinner End -->
 
+      <?php
+        //validations des champs
+        function validateUsername($username){
+            if(empty($username)){
+                return "obligatoire a remplir le champ";
+            }
+            if(strlen($username)<3){
+                 return "le nom d'utilisateur doit contenir au moins 3 caracters";
+            }
+            return true;
+    }
 
+       function validatePassword($password){
+          if(empty($password)){
+                return "obligatoire a remplir le champ";
+          }
+            if(strlen($password)<3){
+                 return "le nom d'utilisateur doit contenir au moins 3 caracters";
+            }
+            return true;
+       }
+
+       function validateEmail($email){
+             if(empty($email)){
+                   return "obligatoire a remplir le champ";
+             }
+             if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+                 return "l'email n'est pas valide";
+             }
+             return true;
+       }
+
+       //SIGN UP
+       if(isset($_POST['signup'])){
+            $username=trim($_POST['username']);
+            $pwd=trim($_POST['password']);
+            $email=trim($_POST['email']);
+            $role="visiteur";
+        //rappel des focntions pour la validation
+        $verifyUsername=validateUsername($username);
+        $verifypassword=validatePassword($pwd);
+        $verifyemail= validateEmail($email);
+         if($verifyUsername!==true){
+            echo"<div class='alert alert-danger'>$verifyUsername</div>";
+            exit;
+     }
+        if($verifypassword!==true){
+              echo"<div class='alert alert-danger'>$verifypassword</div>";
+              exit;
+        }
+        if($verifyemail!==true){
+               echo"<div class='alert alert-danger'>$verifyemail</div>";
+               exit;
+        }
+        //fin de validation
+        //debut de liason avec la base de donnes
+        require_once 'include/db.php';
+         $hashPassword=password_hash($pwd,PASSWORD_BCRYPT);
+         $insert=$db->prepare('insert into utilisateur (username,password,email,role) values(?,?,?,?)');
+         $insert->execute([$username, $hashPassword,$email, $role]);
+         
+          if($role ==='visiteur'){
+                header("location:espacevisiteur.php");
+                      exit;
+          }else{
+                header("location:espaceAuteur.php");
+                      exit;
+        }
+    }
+      ?>
         <!-- Sign Up Start -->
         <div class="container-fluid">
+               <form action="signup.php" method="post">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
@@ -53,16 +122,17 @@
                             </a>
                             <h3>Sign Up</h3>
                         </div>
+             
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingText" placeholder="jhondoe">
+                            <input type="text" class="form-control" id="floatingText" name="username" placeholder="jhondoe">
                             <label for="floatingText">Username</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" id="floatingInput"  name="email" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -72,15 +142,17 @@
                             </div>
                             <a href="">Forgot Password</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                        <button type="submit" name="signup" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                         <p class="text-center mb-0">Already have an Account? <a href="">Sign In</a></p>
                     </div>
                 </div>
+
             </div>
         </div>
+        </form>
         <!-- Sign Up End -->
     </div>
-
+ 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
