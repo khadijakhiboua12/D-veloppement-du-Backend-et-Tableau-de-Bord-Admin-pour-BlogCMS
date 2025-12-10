@@ -162,10 +162,15 @@
               <td><?php echo($elem['email']) ;?></td>
               <td><?php echo($elem['role']);?></td>
               <td>
-                <a class="btn btn-sm btn-primary" href="modifier_role.php?edit=<?php echo $elem['id'];?>">Rendre role
+                <a class="btn btn-sm btn-primary" href="modofier_role.php?edit=<?php echo $elem['id'];?>">Rendre role
 </a>
    
-             <a class="btn btn-sm btn-primary" href="supprimer.php?delete=<?php echo $elem['id'];?>">supprimer</a>
+             <a class="btn btn-sm btn-primary" href="delete_user.php?delete=<?php echo $elem['id'];?>"
+             onclick="return 
+             confirm('supprimer cet utilisateur ?')">
+             supprimer
+            </a>
+            </td>
               </tr>
                    <?php 
                    endforeach;
