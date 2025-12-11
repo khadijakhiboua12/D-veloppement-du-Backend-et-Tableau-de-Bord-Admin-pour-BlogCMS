@@ -1,15 +1,10 @@
 <?php
-  if(isset($_POST['ajouter'])){
-       $nom=$_POST['nom'];
-       $description=$_POST['description'];
+       session_start();
        require_once 'include/db.php';
-       if(!empty($nom) && !empty($description)){
-                $insert=$db->prepare('insert into categorie(name,description) values(?,?)');
-                $insert->execute([$nom,$description]);
-       } 
-
-  }
+          $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,44 +97,35 @@
         </div>
     </nav>
 
-    <!-- FORM CENTER -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <section id="contact" class="w-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
+     <div class="container my-5">
+    <h2 class="mb-4">Liste des catégories</h2>
+    <div class="row g-4">
 
-                        <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
-                            <div class="row gy-4">
+       <?php foreach($categorie as $aff): ?>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                   
 
-                                <div class="col-md-6">
-                                    <input type="text" name="nom" class="form-control" placeholder="Nom" required>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="description" rows="6" placeholder="description" required></textarea>
-                                </div>
-
-                                <div class="col-md-12 text-center">
-                                    <button type="submit"  name="ajouter" class="btn btn-primary rounded-pill px-4">
-                                        Ajouter categorie
-                                    </button>
-                                    <a href="Afficher_categorie.php" class="btn btn-primary rounded-pill px-4">
-                                      Voir categorie
-                                     </a>
-
-                                </div>
-
-                            </div>
-                        </form>
-
+                    <h5 class="card-title"><?php echo $aff['name']   ?></h5>
+                    <p class="card-text"><?php echo $aff['description']?></p>
+                    <div class="mt-3">
+                        <a href="modifier_categorie.php?edit=<?php echo $aff['id'];?>" class="btn btn-primary me-2">Modifier</a>
+                        <a href="supprimer_categorie.php?delete=<?php echo $aff['id'];?>" class="btn btn-danger">Supprimer</a>
                     </div>
                 </div>
+                   
             </div>
-        </section>
-    </div>
+           
+        </div>
+         <?php endforeach; ?>
+</div>
+                 
+</div>
 
-    <!-- Bootstrap JS -->
+       
+
+     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
