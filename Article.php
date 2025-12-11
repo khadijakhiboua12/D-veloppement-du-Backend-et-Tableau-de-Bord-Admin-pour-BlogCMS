@@ -1,3 +1,15 @@
+<?php
+  if(isset($_POST['ajouter'])){
+       $nom=$_POST['nom'];
+       $description=$_POST['description'];
+       require_once 'include/db.php';
+       if(!empty($nom) && !empty($description)){
+                $insert=$db->prepare('insert into categorie(name,description) values(?,?)');
+                $insert->execute([$nom,$description]);
+       } 
+
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,24 +109,25 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
 
-                        <form class="shadow-lg rounded p-4 bg-white w-100">
+                        <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
                             <div class="row gy-4">
 
                                 <div class="col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                                    <input type="text" name="nom" class="form-control" placeholder="Nom" required>
                                 </div>
 
                                 <div class="col-md-12">
-                                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                                    <textarea class="form-control" name="description" rows="6" placeholder="description" required></textarea>
                                 </div>
 
                                 <div class="col-md-12 text-center">
-                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
-                                        Ajouter Article
+                                    <button type="submit"  name="ajouter" class="btn btn-primary rounded-pill px-4">
+                                        Ajouter categorie
                                     </button>
-                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
-                                        Voir Article
-                                    </button>
+                                    <a href="Afficher_categorie.php" class="btn btn-primary rounded-pill px-4">
+                                      Voir categorie
+                                     </a>
+
                                 </div>
 
                             </div>

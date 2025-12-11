@@ -56,14 +56,14 @@
                          $_SESSION['id']   = $user['id'];
                          $_SESSION['role'] = $user['role'];
 
-    // Redirection selon le rôle
+ 
                if ($user['role'] == 'admin') {
                       header('Location: espaceAdmin.php');
                            exit;
                } elseif ($user['role'] == 'auteur') {
                       header('Location: espaceAuteur.php');
                          exit;
-                } else { // visiteur
+                } else { 
                      header('Location: espaceVisiteur.php');
                      exit;
     }
