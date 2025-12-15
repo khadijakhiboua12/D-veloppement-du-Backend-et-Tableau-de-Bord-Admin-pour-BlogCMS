@@ -1,8 +1,9 @@
 <?php
-       session_start();
-       require_once 'include/db.php';
-          $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
+  session_start();
+  require_once 'include/db.php';
+  $article=$db->query('select * from article')->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 
 <!DOCTYPE html>
@@ -28,12 +29,8 @@
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/css/main.css" rel="stylesheet">
-  
-
-
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,22 +49,21 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-
 </head>
-   
-
   <style>
-.form-control:focus {
-    border-color: #ff8800;
-    box-shadow: 0 0 0 0.2rem rgba(255, 136, 0, 0.25);
-}
-
-.btn-orange:hover {
-    background-color: #e67600; 
-    border-color: #e67600;
-}
-
-</style>
+    .card-img-top {
+      height: 300px; /* hauteur fixe pour images */
+      object-fit: cover; /* image couvre toute la zone */
+    }
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+    .card-footer {
+      background-c
+      color: #f8f9fa;
+    }
+  </style>
 
  <body class="d-flex flex-column vh-100">
 
@@ -85,8 +81,6 @@
                     <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
-
-
                 </ul>
 
                 <form class="d-flex">
@@ -96,34 +90,36 @@
             </div>
         </div>
     </nav>
-
-     <div class="container my-5">
-    <h2 class="mb-4">Liste des catégories</h2>
-    <div class="row g-4">
-
-       <?php foreach($categorie as $aff): ?>
-        <div class="col-md-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <h5 class="card-title"><?php echo $aff['name']   ?></h5>
-                    <p class="card-text"><?php echo $aff['description']?></p>
-                    <div class="mt-3">
-                        <a href="modifier_categorie.php?edit=<?php echo $aff['id'];?>" class="btn btn-primary me-2">Modifier</a>
-                        <a href="supprimer_categorie.php?delete=<?php echo $aff['id'];?>" class="btn btn-danger">Supprimer</a>
-                    </div>
-                </div>
-                   
+  <div class="container my-5">
+    <?php  foreach($article as $art):?>
+     <!-- Card Article 1 -->
+    <div class="card mb-4">
+        <img src="assets/img/default.jpg" class="card-img-top" alt="Article 1">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title"><?php echo $art['title']?></h5>
+            <p class="card-text"><?php echo $art['content']?></p>
+            <p class="text-muted">categorie | dTEcreat</p>
+             
+            <!-- Boutons selon rôle -->
+            <div class="mt-auto">
+                <!-- Pour visiteur -->
+               
+                
+                <!-- Pour auteur -->
+                <a href="#" class="btn btn-warning btn-space">Modifier</a>
+                <a href="#" class="btn btn-danger btn-space">Supprimer</a>
+                
+        <a href="#" class="btn btn-success">Ajouter un commentaire</a>
+ 
             </div>
-           
         </div>
-         <?php endforeach; ?>
-</div>
-                 
-</div>
+        <div class="card-footer text-muted">
+            <span>Statut :</span><?php echo $art['status'] ?>
+        </div>
+    </div>
+    <?php endforeach?>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-       
-
-     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

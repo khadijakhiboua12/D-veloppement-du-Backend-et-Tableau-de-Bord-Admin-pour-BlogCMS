@@ -1,15 +1,29 @@
 <?php
-  if(isset($_POST['ajouter'])){
-       $nom=$_POST['nom'];
-       $description=$_POST['description'];
-       require_once 'include/db.php';
-       if(!empty($nom) && !empty($description)){
-                $insert=$db->prepare('insert into categorie(name,description) values(?,?)');
-                $insert->execute([$nom,$description]);
-       } 
+session_start();
+ require_once 'include/db.php';
+  $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
+if (isset($_POST['ajouter'])) {
+    $titre = $_POST['titre'];
+    $contenu = $_POST['content'];
+    $image = $_POST['image'];
+    $user_id = $_SESSION['id'];
+    $categorie_id = $_POST['categorie'] ;
+    $status = $_POST['status'];
 
-  }
+    if (!empty($titre) && !empty($contenu) && !empty($image) && !empty($categorie_id) && !empty($user_id) && !empty($status)) {
+        $insert = $db->prepare(
+            "INSERT INTO article (title, content, image_url, user_id, category_id, status)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $insert->execute([$titre, $contenu, $image, $user_id, $categorie_id, $status]);
+        echo "Article ajouté avec succès !";
+    } else {
+        echo "Veuillez remplir tous les champs.";
+    }
+}
+   
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,18 +75,28 @@
 </head>
    
 
-  <style>
+ <style>
+/* Focus orange exist déjà */
 .form-control:focus {
     border-color: #ff8800;
     box-shadow: 0 0 0 0.2rem rgba(255, 136, 0, 0.25);
 }
 
+/* Bouton hover orange */
 .btn-orange:hover {
     background-color: #e67600; 
     border-color: #e67600;
 }
 
+/* FORMS ET INPUTS CLAIRS */
+input.form-control,
+textarea.form-control,
+select.form-control {
+    background-color: #fff !important;  /* Fond blanc */
+    color: #000 !important;             /* Texte noir */
+}
 </style>
+
 
  <body class="d-flex flex-column vh-100">
 
@@ -90,10 +114,7 @@
                     <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
-
-
                 </ul>
-
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
                     <button class="btn btn-outline-success">Search</button>
@@ -101,43 +122,59 @@
             </div>
         </div>
     </nav>
+   <!-- FORM CENTER -->
+<div class="d-flex justify-content-center align-items-center flex-grow-1">
+    <section id="contact" class="w-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
 
-    <!-- FORM CENTER -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <section id="contact" class="w-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
+                    <!-- Titre -->
+                    <h2 class="text-center mb-4" style="color: #fff;">Ajouter Article</h2>
+<form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
+    <div class="mb-3">
+        <label style="color: #fff;" >Title</label>
+        <input type="text"  name="titre"  class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label style="color: #fff;">Content</label>
+        <textarea name="content" class="form-control" rows="6" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label style="color: #fff;" >Image URL</label>
+        <input type="text"   name="image" class="form-control">
+    </div>
+    <div class="mb-3">
+       <label style="color: #fff;">Catégorie</label>
+        <select name="categorie" class="form-control" >
+        <option value=""> Sélectionner </option>
 
-                        <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
-                            <div class="row gy-4">
+        <?php foreach ($categorie as $cat): ?>
+        <option value="<?= $cat['id'] ?>" ><?=htmlspecialchars($cat['name']) ?></option>
+         <?php endforeach; ?>
 
-                                <div class="col-md-6">
-                                    <input type="text" name="nom" class="form-control" placeholder="Nom" required>
-                                </div>
+        </select>
 
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="description" rows="6" placeholder="description" required></textarea>
-                                </div>
+    </div>
+    <div class="mb-3">
+        <label style="color: #fff;">Status</label>
+        <select name="status" class="form-control" required>
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+            <option value="archived">Archived</option>
+        </select>
+    </div>
+    <button type="submit" name="ajouter" class="btn btn-success">Ajouter Article</button>
+    <a href="Afficher_Article.php" class="btn btn-primary rounded-pill px-4">Voir Article</a>
+</form>
 
-                                <div class="col-md-12 text-center">
-                                    <button type="submit"  name="ajouter" class="btn btn-primary rounded-pill px-4">
-                                        Ajouter categorie
-                                    </button>
-                                    <a href="Afficher_categorie.php" class="btn btn-primary rounded-pill px-4">
-                                      Voir categorie
-                                     </a>
 
-                                </div>
 
-                            </div>
-                        </form>
-
-                    </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
