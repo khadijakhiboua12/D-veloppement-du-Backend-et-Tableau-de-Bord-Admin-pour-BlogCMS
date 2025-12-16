@@ -8,13 +8,11 @@ require_once 'include/db.php';
     $article= $art->fetch(PDO::FETCH_ASSOC);
   }
 $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
+
   if(isset($_POST['modifier'])){
-    $id = $_POST['id'];
     $titre = $_POST['titre'];
     $contenu = $_POST['content'];
     $image = $_POST['image'];
-    //  $user_id = $_SESSION['id'];
-    
     $categorie_id = $_POST['categorie'] ;
     $status = $_POST['status'];
     
@@ -136,7 +134,6 @@ select.form-control {
 
             <h2 class="text-center mb-4" style="color: #fff;">Modifier Article</h2>
 <form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
-     <input type="hidden" name="id" value="<?php echo $article['id']; ?>">
     <div class="mb-3">
         <label style="color: #fff;" >Title</label>
         <input type="text"  name="titre"  class="form-control" value="<?php echo $article['title'];?>" required>
@@ -166,7 +163,7 @@ select.form-control {
         <select name="status" class="form-control" required>
             <option value="draft"<?php echo($article['status']=='draft')? 'selected' :'' ;?>>Draft </option>
             <option value="published" <?php echo ($article['status'] =='published') ? 'selected' : '' ;?>> published</option>
-            <option value="archived" <?php echo ($article['status']=='archived') ? 'archived' : '' ;?>>archived</option>
+            <option value="archived" <?php echo ($article['status']=='archived') ? 'selected'  : '' ;?>>archived</option>
         </select>
     </div>
     <button type="submit" name="modifier" class="btn btn-success">Modifier</button>
