@@ -1,7 +1,10 @@
 <?php
   session_start();
   require_once 'include/db.php';
-  $article=$db->query('select * from article')->fetchAll(PDO::FETCH_ASSOC);
+  $article=$db->query('SELECT a.id AS article_id, a.title, a.content , a.created_at, a.image_url, a.status, c.name AS categorie
+               FROM article a
+               JOIN categorie c ON a.category_id = c.id'
+  )->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -94,11 +97,17 @@
     <?php  foreach($article as $art):?>
      <!-- Card Article 1 -->
     <div class="card mb-4">
-        <img src="assets/img/default.jpg" class="card-img-top" alt="Article 1">
+       <img 
+  src="<?php echo !empty($art['image_url']) ? $art['image_url'] : 'img/default.jpg'; ?>" 
+  class="card-img-top"
+>
+
         <div class="card-body d-flex flex-column">
-            <h5 class="card-title"><?php echo $art['title']?></h5>
-            <p class="card-text"><?php echo $art['content']?></p>
-            <p class="text-muted">categorie | dTEcreat</p>
+            <h5 class="card-title">Titre : <?php echo $art['title']?></h5>
+            <p class="card-text">contenu : <?php echo $art['content']?></p>
+            <p class="text-muted">categorie : <?php echo $art['categorie']?></p>
+            <p class="text-muted">date creation:<?php echo $art['created_at']?></p>
+           <p class="text-muted"><i class="bi bi-chat-dots"></i></p>
              
             <!-- Boutons selon rôle -->
             <div class="mt-auto">
@@ -106,10 +115,10 @@
                
                 
                 <!-- Pour auteur -->
-                <a href="#" class="btn btn-warning btn-space">Modifier</a>
-                <a href="#" class="btn btn-danger btn-space">Supprimer</a>
+                <a href="modifier_article.php?edit=<?php echo $art['article_id'];?>" class="btn btn-warning btn-space">Modifier</a>
+                <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" class="btn btn-danger btn-space">Supprimer</a>
                 
-        <a href="#" class="btn btn-success">Ajouter un commentaire</a>
+        <a href="commentaire.php" class="btn btn-success">commente</a>
  
             </div>
         </div>
@@ -118,6 +127,7 @@
         </div>
     </div>
     <?php endforeach?>
+
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 

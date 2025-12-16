@@ -11,17 +11,10 @@ if (isset($_POST['ajouter'])) {
     $status = $_POST['status'];
 
     if (!empty($titre) && !empty($contenu) && !empty($image) && !empty($categorie_id) && !empty($user_id) && !empty($status)) {
-        $insert = $db->prepare(
-            "INSERT INTO article (title, content, image_url, user_id, category_id, status)
-             VALUES (?, ?, ?, ?, ?, ?)"
-        );
-        $insert->execute([$titre, $contenu, $image, $user_id, $categorie_id, $status]);
-        echo "Article ajouté avec succès !";
-    } else {
-        echo "Veuillez remplir tous les champs.";
-    }
+       $insert = $db->prepare("INSERT INTO article (title,content,image_url,user_id,category_id,status) VALUES (?, ?, ?, ?, ?, ?)");
+       $insert->execute([$titre, $contenu, $image, $user_id, $categorie_id, $status]);    
 }
-   
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,7 +123,7 @@ select.form-control {
                 <div class="col-lg-10">
 
                     <!-- Titre -->
-                    <h2 class="text-center mb-4" style="color: #fff;">Ajouter Article</h2>
+<h2 class="text-center mb-4" style="color: #fff;">Ajouter Article</h2>
 <form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
     <div class="mb-3">
         <label style="color: #fff;" >Title</label>
@@ -142,7 +135,7 @@ select.form-control {
     </div>
     <div class="mb-3">
         <label style="color: #fff;" >Image URL</label>
-        <input type="text"   name="image" class="form-control">
+        <input type="text"   name="image" class="form-control" placeholder="https://example.com/img.jpg">
     </div>
     <div class="mb-3">
        <label style="color: #fff;">Catégorie</label>
@@ -150,7 +143,7 @@ select.form-control {
         <option value=""> Sélectionner </option>
 
         <?php foreach ($categorie as $cat): ?>
-        <option value="<?= $cat['id'] ?>" ><?=htmlspecialchars($cat['name']) ?></option>
+        <option value="<?php echo $cat['id'] ?>" ><?php echo ($cat['name']) ?></option>
          <?php endforeach; ?>
 
         </select>

@@ -1,18 +1,28 @@
 <?php
-session_start();
- require_once 'include/db.php';
-  $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
-if (isset($_POST['ajouter'])) {
+
+require_once 'include/db.php';
+  if(isset($_GET['edit'])){
+    $id=$_GET['edit'];
+    $art=$db->prepare("select * from article where id=?");
+    $art->execute([$id]);
+    $article= $art->fetch(PDO::FETCH_ASSOC);
+  }
+$categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
+  if(isset($_POST['modifier'])){
+    $id = $_POST['id'];
     $titre = $_POST['titre'];
     $contenu = $_POST['content'];
     $image = $_POST['image'];
-    $user_id = $_SESSION['id'];
+    //  $user_id = $_SESSION['id'];
+    
     $categorie_id = $_POST['categorie'] ;
     $status = $_POST['status'];
-
-    if (!empty($titre) && !empty($contenu) && !empty($image) && !empty($categorie_id) && !empty($user_id) && !empty($status)) {
-       $insert = $db->prepare("INSERT INTO article (title,content,image_url,user_id,category_id,status) VALUES (?, ?, ?, ?, ?, ?)");
-       $insert->execute([$titre, $contenu, $image, $user_id, $categorie_id, $status]);    
+    
+    if (!empty($titre) && !empty($contenu)  && !empty($categorie_id)  && !empty($status)) {
+       $update = $db->prepare("update article  SET title=? ,content=?, image_url=?, category_id=?, status=? where id=? ");
+       $update->execute([$titre, $contenu, $image, $categorie_id, $status, $id]);
+      header("Location: Afficher_Article.php");
+      exit;    
 }
 }
 ?>
@@ -123,23 +133,43 @@ select.form-control {
                 <div class="col-lg-10">
 
                     <!-- Titre -->
-<h2 class="text-center mb-4" style="color: #fff;">Ajouter commentaire</h2>
+
+            <h2 class="text-center mb-4" style="color: #fff;">Modifier Article</h2>
 <form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
-   
+     <input type="hidden" name="id" value="<?php echo $article['id']; ?>">
+    <div class="mb-3">
+        <label style="color: #fff;" >Title</label>
+        <input type="text"  name="titre"  class="form-control" value="<?php echo $article['title'];?>" required>
+    </div>
     <div class="mb-3">
         <label style="color: #fff;">Content</label>
-        <textarea name="content" class="form-control" rows="6" required></textarea>
+        <textarea name="content" class="form-control" rows="6" required><?php echo $article['content']; ?></textarea>
+    </div>
+    <div class="mb-3">
+        <label style="color: #fff;" >Image URL</label>
+        <input type="text"   name="image" class="form-control" value="<?php echo $article['image_url']; ?>">
+    </div>
+    <div class="mb-3">
+       <label style="color: #fff;">Catégorie</label>
+        <select name="categorie" class="form-control" >
+        <option value=""> Sélectionner </option>
+
+        <?php foreach ($categorie as $cat): ?>
+        <option value="<?php echo $cat['id'] ?>" ><?php echo ($cat['name']) ?></option>
+         <?php endforeach; ?>
+
+        </select>
+
     </div>
     <div class="mb-3">
         <label style="color: #fff;">Status</label>
         <select name="status" class="form-control" required>
-            <option value="draft">approved</option>
-            <option value="published">pending</option>
-            <option value="archived">spam</option>
+            <option value="draft"<?php echo($article['status']=='draft')? 'selected' :'' ;?>>Draft </option>
+            <option value="published" <?php echo ($article['status'] =='published') ? 'selected' : '' ;?>> published</option>
+            <option value="archived" <?php echo ($article['status']=='archived') ? 'archived' : '' ;?>>archived</option>
         </select>
     </div>
-     <button type="submit" name="ajouter" class="btn btn-success">Ajouter  commentaire</button>
-    <a href="Afficher_commentaire.php" class="btn btn-primary rounded-pill px-4">Voir commentaire</a>
+    <button type="submit" name="modifier" class="btn btn-success">Modifier</button>
 
 </form>
 
