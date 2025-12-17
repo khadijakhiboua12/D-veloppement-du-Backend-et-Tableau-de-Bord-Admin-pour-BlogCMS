@@ -1,5 +1,13 @@
+<?php
+session_start();
 
+require_once 'include/db.php';
 
+ $commentaire=$db->query('SELECT  *
+               FROM commentaire c join utilisateur u on c.idU=u.id
+               '
+  )->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,9 +49,10 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
@@ -54,41 +63,44 @@
     </nav>
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
-                    <h6 class="mb-4">Gestion des commentaire</h6>
+                    <h3 class="mb-4">Gestion des commentaire</h3>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>
                                 <tr class="text-white">
                                     <th>ID</th>
-                                    <th>Username</th>
+                                   <th>Username</th>
                                     <th>Contenu</th>
                                     <th>statut</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+    <?php foreach($commentaire as $elm):?>
 
-    <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+             <tr>
+              <td><?php echo ($elm['idc']);?></td>
+              <td><?php echo ($elm['username']);?></td>
+              <td><?php echo ($elm['content']);?></td>
+              <td><?php echo ($elm['status']);?></td>
               <td>
-                <a class="btn btn-sm btn-primary" href="modofier_role.php?edit">Modifier
-</a>
-   
-             <a class="btn btn-sm btn-primary" href="delete_user.php?delete">
-
+                <a class="btn btn-sm btn-primary" href="modifier_commentaire.php?edit=<?php echo $elm['idc'];?>">Modifier
+</a> 
+             <a class="btn btn-sm btn-primary" href="supprimer_commentaire.php?delete=<?php echo $elm['idc'];?>"
+              onclick="return 
+             confirm('supprimer cet utilisateur ?')">
              supprimer
+            
             </a>
             </td>
               </tr>
+              <?php endforeach ;?>
                  
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
+        </div>
 
            <!-- Footer -->
 <footer class="bg-secondary text-white p-4 fixed-bottom w-100">

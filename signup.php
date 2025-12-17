@@ -102,10 +102,7 @@
          $insert->execute([$username, $hashPassword,$email, $role]);
          
           if($role ==='visiteur'){
-                header("location:espacevisiteur.php");
-                      exit;
-          }else{
-                header("location:espaceAuteur.php");
+                header("location:Afficher_Article.php");
                       exit;
         }
     }
@@ -118,7 +115,7 @@
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>BlogCMS</h3>
                             </a>
                             <h3>Sign Up</h3>
                         </div>

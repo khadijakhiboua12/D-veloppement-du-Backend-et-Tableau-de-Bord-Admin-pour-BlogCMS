@@ -82,9 +82,10 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                 <li class="nav-item"><a class="nav-link active" href="Article.php"> Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categories</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaires</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
 
 
                 </ul>
@@ -109,7 +110,11 @@
                     <p class="card-text"><?php echo $aff['description']?></p>
                     <div class="mt-3">
                         <a href="modifier_categorie.php?edit=<?php echo $aff['id'];?>" class="btn btn-primary me-2">Modifier</a>
-                        <a href="supprimer_categorie.php?delete=<?php echo $aff['id'];?>" class="btn btn-danger">Supprimer</a>
+                        <a href="supprimer_categorie.php?delete=<?php echo $aff['id'];?>" class="btn btn-danger"
+                         onclick="return 
+             confirm('supprimer cet utilisateur ?')">
+          
+                            Supprimer</a>
                     </div>
                 </div>
                    

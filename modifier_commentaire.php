@@ -1,15 +1,27 @@
 <?php
-  if(isset($_POST['ajouter'])){
-       $nom=$_POST['nom'];
-       $description=$_POST['description'];
-       require_once 'include/db.php';
-       if(!empty($nom) && !empty($description)){
-                $insert=$db->prepare('insert into categorie(name,description) values(?,?)');
-                $insert->execute([$nom,$description]);
-       } 
 
+require_once 'include/db.php';
+  if(isset($_GET['edit'])){
+    $id=$_GET['edit'];
+    $cm=$db->prepare("select * from commentaire where idc=?");
+    $cm->execute([$id]);
+    $commentaire= $cm->fetch(PDO::FETCH_ASSOC);
+    
   }
+  if(isset($_POST['modifier'])){
+    $id = $_POST['idc'];
+    $contenu = $_POST['content'];
+    $idU=$_SESSION['id'];
+    $status = $_POST['status'];
+    if (!empty($contenu)    && !empty($status)) {
+       $update = $db->prepare("update commentaire  SET content=?, status=? where idc=? ");
+       $update->execute([$contenu, $status, $id]);
+      header("Location: Afficher_commentaire.php");
+      exit;    
+}
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,18 +73,28 @@
 </head>
    
 
-  <style>
+ <style>
+/* Focus orange exist déjà */
 .form-control:focus {
     border-color: #ff8800;
     box-shadow: 0 0 0 0.2rem rgba(255, 136, 0, 0.25);
 }
 
+/* Bouton hover orange */
 .btn-orange:hover {
     background-color: #e67600; 
     border-color: #e67600;
 }
 
+/* FORMS ET INPUTS CLAIRS */
+input.form-control,
+textarea.form-control,
+select.form-control {
+    background-color: #fff !important;  /* Fond blanc */
+    color: #000 !important;             /* Texte noir */
+}
 </style>
+
 
  <body class="d-flex flex-column vh-100">
 
@@ -87,14 +109,11 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                  <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                   <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
                     <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
                     <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
                     <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-
-
                 </ul>
-
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
                     <button class="btn btn-outline-success">Search</button>
@@ -102,51 +121,44 @@
             </div>
         </div>
     </nav>
+   <!-- FORM CENTER -->
+<div class="d-flex justify-content-center align-items-center flex-grow-1">
+    <section id="contact" class="w-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
 
-    <!-- FORM CENTER -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <section id="contact" class="w-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
+                    <!-- Titre -->
+<h2 class="text-center mb-4" style="color: #fff;">Modifier commentaire</h2>
+<form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
+   <input type="hidden" name="idc" value="<?php echo $commentaire['idc']; ?>">
 
-                        <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
-                            <div class="row gy-4"> 
-                                <div class="col-md-6">
-                                    <select name="nom" class="form-control">
-                                        <option>Technologie</option>
-                                        <option>Santé</option>
-                                        <option>Voyage</option>
-                                        <option>Cuisine</option>
-                                        <option>Sport</option>
-                                        <option>Éducation</option>
-                                        <option>Finance</option>
-                                        <option>Mode</option>
-                                    </select>
-                                </div>
+    <div class="mb-3">
+        <label style="color: #fff;">Content</label>
+        <textarea name="content" class="form-control" rows="6" required><?php echo  $commentaire['content'];?></textarea>
+    </div>
+    <div class="mb-3">
+        <label style="color: #fff;">Status</label>
+    <select name="status" class="form-control" required>
+        <option value="pending"<?php echo($commentaire['status']=='pending')?'selected' : '' ;?>>pending</option>
+        <option value="approved"<?php echo($commentaire['status']=='approved')?'selected ' :'' ;?>> approved</option>
+        <option value="rejected"<?php echo($commentaire['status']=='rejected')? 'selected' : '' ;?>>rejected</option>
+        <option value="spam"<?php echo($commentaire['status']=='spam')? 'selected' : '';?>>spam</option>
+    </select>
 
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="description" rows="6" placeholder="description" required></textarea>
-                                </div>
+    </div>
+     <button type="submit" name="modifier" class="btn btn-success">Modifier</button>
+      <a href="Afficher_commentaire.php" class="btn btn-secondary">Annuler</a>
 
-                                <div class="col-md-12 text-center">
-                                    <button type="submit"  name="ajouter" class="btn btn-primary rounded-pill px-4">
-                                        Ajouter categorie
-                                    </button>
-                                    <a href="Afficher_categorie.php" class="btn btn-primary rounded-pill px-4">
-                                      Voir categorie
-                                     </a>
+</form>
 
-                                </div>
 
-                            </div>
-                        </form>
 
-                    </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,15 +1,14 @@
 <?php
-  if(isset($_POST['ajouter'])){
-       $nom=$_POST['nom'];
-       $description=$_POST['description'];
-       require_once 'include/db.php';
-       if(!empty($nom) && !empty($description)){
-                $insert=$db->prepare('insert into categorie(name,description) values(?,?)');
-                $insert->execute([$nom,$description]);
-       } 
-
-  }
+  session_start();
+  require_once 'include/db.php';
+  $article=$db->query('SELECT a.id AS article_id , a.title, a.content , a.created_at, a.image_url, a.status, c.name AS categorie
+               FROM article a
+               JOIN categorie c ON a.category_id = c.id'
+  )->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,12 +32,8 @@
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <link href="assets/css/main.css" rel="stylesheet">
-  
-
-
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,22 +52,21 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-
 </head>
-   
-
   <style>
-.form-control:focus {
-    border-color: #ff8800;
-    box-shadow: 0 0 0 0.2rem rgba(255, 136, 0, 0.25);
-}
-
-.btn-orange:hover {
-    background-color: #e67600; 
-    border-color: #e67600;
-}
-
-</style>
+    .card-img-top {
+      height: 300px; /* hauteur fixe pour images */
+      object-fit: cover; /* image couvre toute la zone */
+    }
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+    .card-footer {
+      background-c
+      color: #f8f9fa;
+    }
+  </style>
 
  <body class="d-flex flex-column vh-100">
 
@@ -87,12 +81,10 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                  <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
                     <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
                     <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
                     <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-
-
                 </ul>
 
                 <form class="d-flex">
@@ -102,53 +94,31 @@
             </div>
         </div>
     </nav>
+  <div class="container my-5">
+    <?php  foreach($article as $art):?>
+     <!-- Card Article 1 -->
+    <div class="card mb-4">
+       <img 
+  src="<?php echo !empty($art['image_url']) ? $art['image_url'] : 'img/default.jpg'; ?>" 
+  class="card-img-top"
+>
 
-    <!-- FORM CENTER -->
-    <div class="d-flex justify-content-center align-items-center flex-grow-1">
-        <section id="contact" class="w-100">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10">
-
-                        <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
-                            <div class="row gy-4"> 
-                                <div class="col-md-6">
-                                    <select name="nom" class="form-control">
-                                        <option>Technologie</option>
-                                        <option>Santé</option>
-                                        <option>Voyage</option>
-                                        <option>Cuisine</option>
-                                        <option>Sport</option>
-                                        <option>Éducation</option>
-                                        <option>Finance</option>
-                                        <option>Mode</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <textarea class="form-control" name="description" rows="6" placeholder="description" required></textarea>
-                                </div>
-
-                                <div class="col-md-12 text-center">
-                                    <button type="submit"  name="ajouter" class="btn btn-primary rounded-pill px-4">
-                                        Ajouter categorie
-                                    </button>
-                                    <a href="Afficher_categorie.php" class="btn btn-primary rounded-pill px-4">
-                                      Voir categorie
-                                     </a>
-
-                                </div>
-
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Titre : <?php echo $art['title']?></h5>
+            <p class="card-text">contenu : <?php echo $art['content']?></p>
+            <p class="text-muted">categorie : <?php echo $art['categorie']?></p>
+            <p class="text-muted">date creation:<?php echo $art['created_at']?></p>
+            <p class="text-muted">commentaire:<?php echo $_SESSION['content']?></p>
             </div>
-        </section>
+        </div>
+        <div class="card-footer text-muted">
+            <span>Statut :</span><?php echo $art['status'] ?>
+        </div>
     </div>
+    <?php endforeach?>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

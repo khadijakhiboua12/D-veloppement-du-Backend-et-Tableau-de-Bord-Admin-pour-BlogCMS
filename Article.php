@@ -1,7 +1,9 @@
 <?php
 session_start();
  require_once 'include/db.php';
+
   $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
+
 if (isset($_POST['ajouter'])) {
     $titre = $_POST['titre'];
     $contenu = $_POST['content'];
@@ -104,9 +106,11 @@ select.form-control {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                   <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="categorie.php"> Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
@@ -141,7 +145,6 @@ select.form-control {
        <label style="color: #fff;">Catégorie</label>
         <select name="categorie" class="form-control" >
         <option value=""> Sélectionner </option>
-
         <?php foreach ($categorie as $cat): ?>
         <option value="<?php echo $cat['id'] ?>" ><?php echo ($cat['name']) ?></option>
          <?php endforeach; ?>

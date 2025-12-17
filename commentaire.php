@@ -1,21 +1,36 @@
 <?php
 session_start();
- require_once 'include/db.php';
-  $categorie=$db->query('select * from categorie')->fetchAll(PDO::FETCH_ASSOC);
-if (isset($_POST['ajouter'])) {
-    $titre = $_POST['titre'];
-    $contenu = $_POST['content'];
-    $image = $_POST['image'];
-    $user_id = $_SESSION['id'];
-    $categorie_id = $_POST['categorie'] ;
-    $status = $_POST['status'];
-
-    if (!empty($titre) && !empty($contenu) && !empty($image) && !empty($categorie_id) && !empty($user_id) && !empty($status)) {
-       $insert = $db->prepare("INSERT INTO article (title,content,image_url,user_id,category_id,status) VALUES (?, ?, ?, ?, ?, ?)");
-       $insert->execute([$titre, $contenu, $image, $user_id, $categorie_id, $status]);    
+require_once 'include/db.php';
+$art_id = $_GET['id'];
+if (!$art_id) {
+    header("Location: Article.php"); 
+    exit;
 }
+$comment=$db->query('select * from commentaire')->fecth(PDO::FETCH_ASSOC);
+$_SESSION['content']=$comment['content'];
+
+$stmt = $db->prepare("SELECT * FROM article WHERE id = ?");
+$stmt->execute([$art_id]);
+$article = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (isset($_POST['ajouter'])) {
+    $contenu = trim($_POST['content']);
+    $idU = $_SESSION['id'] ;
+    $art_id = $_POST['art_id'];
+    $status = 'pending'; 
+
+    if (!empty($contenu) && !empty($idU) && !empty($art_id)) {
+
+        $insert = $db->prepare("
+            INSERT INTO commentaire (content, idU, art_id, status)
+            VALUES (?, ?, ?, ?)
+        ");
+
+        $insert->execute([$contenu, $idU, $art_id, $status]);
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,9 +119,10 @@ select.form-control {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
@@ -125,21 +141,26 @@ select.form-control {
                     <!-- Titre -->
 <h2 class="text-center mb-4" style="color: #fff;">Ajouter commentaire</h2>
 <form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
-   
+      <input type="hidden" name="art_id" value="<?php echo $article['id']; ?>">
     <div class="mb-3">
+
         <label style="color: #fff;">Content</label>
         <textarea name="content" class="form-control" rows="6" required></textarea>
     </div>
     <div class="mb-3">
         <label style="color: #fff;">Status</label>
-        <select name="status" class="form-control" required>
-            <option value="draft">approved</option>
-            <option value="published">pending</option>
-            <option value="archived">spam</option>
-        </select>
+    <select name="status" class="form-control" required>
+        <option value="pending">pending</option>
+        <option value="approved">approved</option>
+        <option value="rejected">rejected</option>
+        <option value="spam">spam</option>
+    </select>
+
     </div>
      <button type="submit" name="ajouter" class="btn btn-success">Ajouter  commentaire</button>
+     <?php  if($_SESSION['role']== 'admin') { ?>
     <a href="Afficher_commentaire.php" class="btn btn-primary rounded-pill px-4">Voir commentaire</a>
+   <?php } ?>
 
 </form>
 

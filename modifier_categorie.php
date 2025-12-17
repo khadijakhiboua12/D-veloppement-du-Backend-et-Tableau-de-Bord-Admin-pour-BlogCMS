@@ -100,9 +100,10 @@ textarea.form-control {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                 <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
 
 
                 </ul>
@@ -131,6 +132,22 @@ textarea.form-control {
             <label>Nom</label>
             <input type="text" name="nom" class="form-control" value="<?php echo $categorie['name']; ?>" required>
         </div>
+        
+            <select name="nom" class="form-control" >
+        <option value=""> Sélectionner </option>
+
+        <?php foreach ($categorie as $cat): ?>
+        <option value="<?php echo $categorie['id'] ?>" ><?php echo ($categorie['name']) ?></option>
+         <?php endforeach; ?>
+
+        </select>
+
+
+
+
+
+
+
         <div class="mb-3">
             <label>Description</label>
            <textarea name="description" class="form-control" rows="5" required><?php  

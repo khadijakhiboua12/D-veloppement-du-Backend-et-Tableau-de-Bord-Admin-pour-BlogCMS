@@ -5,8 +5,11 @@
     $totalUtilisateur=$db->query('select count(*) from utilisateur')->fetchColumn();
     $user=$db->query('select * from utilisateur')->fetchAll(PDO::FETCH_ASSOC);
     //Nombre d'commentaire
+    $commentaire=$db->query('select count(*) from commentaire')->fetchColumn();
     //Nombre categorie
+    $categorie=$db->query('select count(*) from categorie')->fetchColumn();
     //Nombre d'article
+    $article=$db->query('select count(*) from article')->fetchColumn();
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +53,7 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="index.php" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>BlogCMS</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -59,14 +62,26 @@
                     </div>
                     <div class="ms-3">
                         <h6 class="mb-0">Admin</h6>
-                        <span>Admin</span>
+                        <span></span>
                     </div>
                 </div>
-                <div class="navbar-nav w-100">
-                    <a href="index.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                     <a href="categorie.php" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Liste des categorier</a>
-                    <a href="Article.php" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Liste des Articles</a>
-                </div>
+    <div class="navbar-nav w-100 d-flex flex-column gap-2">
+         <a href="espaceAdmin.php" class="nav-item nav-link active">
+      <i class="fa fa-users me-3"></i> Utilisateurs
+
+    </a>
+    <a href="Afficher_Article.php" class="nav-item nav-link active">
+         <i class="fa fa-newspaper me-3"></i> Articlesr
+    </a>
+    <a href="Afficher_categorie.php" class="nav-item nav-link active">
+         <i class="fa fa-list me-3"></i> Catégories
+    </a>
+    <a href="Afficher_commentaire.php" class="nav-item nav-link active">
+        <i class="fa fa-comment me-3"></i> Commentaires
+    </a>
+   
+</div>
+
             </nav>
         </div>
 
@@ -83,9 +98,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">categorie</a></li>
+                   
+                    <li class="nav-item"><a class="nav-link" href="Categorie.php">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="commentaire.php">Déconnecte</a></li>
                 </ul>
 
                 <form class="d-flex">
@@ -100,12 +115,13 @@
     <div class="row g-4">
 
         <!-- Card 1 -->
+         <h1> Statistiques </h1>
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-users fa-3x text-primary"></i>
                 <div class="ms-3">
                     <p class="mb-2">Total Utilisateurs</p>
-                    <h6 class="mb-0"><?= $totalUtilisateur ?></h6>
+                    <h6 class="mb-0"><?php echo $totalUtilisateur ?></h6>
                 </div>
             </div>
         </div>
@@ -113,10 +129,11 @@
         <!-- Card 2 -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-users fa-3x text-primary"></i>
+                <i class="fa fa-comment fa-3x text-primary"></i>
+
                 <div class="ms-3">
                     <p class="mb-2">Total Commentaires</p>
-                    <h6 class="mb-0"><?= $totalUtilisateur ?></h6>
+                    <h6 class="mb-0"><?php $commentaire ?></h6>
                 </div>
             </div>
         </div>
@@ -124,10 +141,11 @@
       <!-- Card 3 -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-users fa-3x text-primary"></i>
+                <i class="fa fa-newspaper fa-3x text-primary"></i>
+
                 <div class="ms-3">
                     <p class="mb-2">Total Articles</p>
-                    <h6 class="mb-0"><?= $totalUtilisateur ?></h6>
+                    <h6 class="mb-0"><?php  $article ?></h6>
                 </div>
             </div>
         </div>
@@ -137,10 +155,11 @@
          <!-- Card 4 -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
-                <i class="fa fa-users fa-3x text-primary"></i>
+               <i class="fa fa-list fa-3x text-primary"></i>
+
                 <div class="ms-3">
                     <p class="mb-2">Total categories</p>
-                    <h6 class="mb-0"><?= $totalUtilisateur ?></h6>
+                    <h6 class="mb-0"><?php echo $categorie ?></h6>
                 </div>
             </div>
         </div>
@@ -157,7 +176,7 @@
             <!-- Gestion utilisateurs -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
-                    <h6 class="mb-4">Gestion des utilisateurs</h6>
+                    <h3 class="mb-4">Gestion des utilisateurs</h3>
                     <div class="table-responsive">
                         <table class="table text-start align-middle table-bordered table-hover mb-0">
                             <thead>

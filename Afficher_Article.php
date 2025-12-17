@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once 'include/db.php';
-  $article=$db->query('SELECT a.id AS article_id, a.title, a.content , a.created_at, a.image_url, a.status, c.name AS categorie
+  $article=$db->query('SELECT a.id AS article_id , a.title, a.content , a.created_at, a.image_url, a.status, c.name AS categorie
                FROM article a
                JOIN categorie c ON a.category_id = c.id'
   )->fetchAll(PDO::FETCH_ASSOC);
@@ -81,9 +81,10 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
+                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
                 </ul>
 
                 <form class="d-flex">
@@ -107,18 +108,29 @@
             <p class="card-text">contenu : <?php echo $art['content']?></p>
             <p class="text-muted">categorie : <?php echo $art['categorie']?></p>
             <p class="text-muted">date creation:<?php echo $art['created_at']?></p>
-           <p class="text-muted"><i class="bi bi-chat-dots"></i></p>
+           
              
             <!-- Boutons selon rôle -->
             <div class="mt-auto">
                 <!-- Pour visiteur -->
                
-                
+                 <?php
+                  if ($_SESSION['role'] == 'auteur' || $_SESSION['role'] == 'admin') {
+                ?>
                 <!-- Pour auteur -->
                 <a href="modifier_article.php?edit=<?php echo $art['article_id'];?>" class="btn btn-warning btn-space">Modifier</a>
-                <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" class="btn btn-danger btn-space">Supprimer</a>
+                <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" class="btn btn-danger btn-space"
+                   onclick="return 
+             confirm('supprimer cet utilisateur ?')">
+             supprimer
+                </a>
+  <?php
+}
+?>
+                  <a  class="btn btn-success" href="commentaire.php?id=<?php echo $art['article_id']; ?>" >Ajouter commentaire</a>
+
+
                 
-        <a href="commentaire.php" class="btn btn-success">commente</a>
  
             </div>
         </div>
