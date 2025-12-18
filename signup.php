@@ -77,7 +77,7 @@
             $username=trim($_POST['username']);
             $pwd=trim($_POST['password']);
             $email=trim($_POST['email']);
-            $role="visiteur";
+            $role="auteur";
         //rappel des focntions pour la validation
         $verifyUsername=validateUsername($username);
         $verifypassword=validatePassword($pwd);
@@ -101,7 +101,7 @@
          $insert=$db->prepare('insert into utilisateur (username,password,email,role) values(?,?,?,?)');
          $insert->execute([$username, $hashPassword,$email, $role]);
          
-          if($role ==='visiteur'){
+          if($role ==='auteur'){
                 header("location:Afficher_Article.php");
                       exit;
         }

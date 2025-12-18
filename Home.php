@@ -7,118 +7,131 @@
   )->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="assets/css/main.css" rel="stylesheet">
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
-    
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
-</head>
-  <style>
-    .card-img-top {
-      height: 300px; /* hauteur fixe pour images */
-      object-fit: cover; /* image couvre toute la zone */
-    }
-    .card-body {
-      display: flex;
-      flex-direction: column;
-    }
-    .card-footer {
-      background-c
-      color: #f8f9fa;
-    }
-  </style>
-
- <body class="d-flex flex-column vh-100">
-
-    <!-- ✅ NAVBAR PROPRE W FULL WIDTH -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm w-100">
-        <div class="container-fluid">
-           
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-                </ul>
-
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-success">Search</button>
-                </form>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Creative - Start Bootstrap Theme</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- SimpleLightbox plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="#page-top">BlogCMS</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="#about">Acceuil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-100">
+                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-8 align-self-end">
+                        <h1 class="text-white font-weight-bold">BlogCMS</h1>
+                        <hr class="divider" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 mb-5">Explorez des articles classés par catégories, lisez leur contenu détaillé et partagez vos avis grâce aux commentaires.
+</p>
+                       
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        
+     <div id="portfolio">
   <div class="container my-5">
-    <?php  foreach($article as $art):?>
-     <!-- Card Article 1 -->
-    <div class="card mb-4">
-       <img 
-  src="<?php echo !empty($art['image_url']) ? $art['image_url'] : 'img/default.jpg'; ?>" 
-  class="card-img-top"
->
+    <div class="row">
+      
+      <?php foreach($article as $art): ?>
+        <div class="col-md-6 col-lg-6 mb-4">
+          
+          <div class="card h-100">
+            
+            <img 
+              src="<?php echo $art['image_url']; ?>" 
+              class="card-img-top"
+              style="height:200px; object-fit:cover;"
+            >
 
-        <div class="card-body d-flex flex-column">
-            <h5 class="card-title">Titre : <?php echo $art['title']?></h5>
-            <p class="card-text">contenu : <?php echo $art['content']?></p>
-            <p class="text-muted">categorie : <?php echo $art['categorie']?></p>
-            <p class="text-muted">date creation:<?php echo $art['created_at']?></p>
-            <p class="text-muted">commentaire:<?php echo $_SESSION['content']?></p>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Titre : <?php echo $art['title']; ?></h5>
+              <p class="card-text">contenu : <?php echo $art['content']; ?></p>
+              <p class="text-muted">categorie : <?php echo $art['categorie']; ?></p>
+              <p class="text-muted">date creation : <?php echo $art['created_at']; ?></p>
+
+              <div class="mt-auto">
+                <?php if ($_SESSION['role']=='auteur' || $_SESSION['role']=='admin'): ?>
+                  <a href="modifier_article.php?edit=<?php echo $art['article_id'];?>" class="btn btn-warning btn-sm">Modifier</a>
+                  <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" 
+                     class="btn btn-danger btn-sm"
+                     onclick="return confirm('supprimer cet article ?')">
+                     Supprimer
+                  </a>
+                <?php endif; ?>
+
+                <a class="btn btn-success btn-sm"
+                   href="Afficher_Article.php?article_id=<?php echo $art['article_id']; ?>">
+                Lire Plus
+                </a>
+              </div>
             </div>
+
+            <div class="card-footer text-muted">
+              Statut : <?php echo $art['status']; ?>
+            </div>
+
+          </div>
         </div>
-        <div class="card-footer text-muted">
-            <span>Statut :</span><?php echo $art['status'] ?>
-        </div>
+
+      <?php endforeach; ?>
+
     </div>
-    <?php endforeach?>
-
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 
-</body>
+        <!-- Call to action-->
+        
+        <!-- Contact-->
+        
+                        >
+        </section>
+        <!-- Footer-->
+        <footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">Copyright &copy; 2023 - Company Name</div></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SimpleLightbox plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
 </html>

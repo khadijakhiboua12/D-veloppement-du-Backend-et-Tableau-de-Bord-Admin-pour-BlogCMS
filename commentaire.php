@@ -6,8 +6,7 @@ if (!$art_id) {
     header("Location: Article.php"); 
     exit;
 }
-$comment=$db->query('select * from commentaire')->fecth(PDO::FETCH_ASSOC);
-$_SESSION['content']=$comment['content'];
+
 
 $stmt = $db->prepare("SELECT * FROM article WHERE id = ?");
 $stmt->execute([$art_id]);
@@ -119,10 +118,9 @@ select.form-control {
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Liste Articels</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Liste Categorie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Commentaire</a></li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search">
@@ -158,7 +156,7 @@ select.form-control {
 
     </div>
      <button type="submit" name="ajouter" class="btn btn-success">Ajouter  commentaire</button>
-     <?php  if($_SESSION['role']== 'admin') { ?>
+     <?php  if( $_SESSION['role']== 'admin') { ?>
     <a href="Afficher_commentaire.php" class="btn btn-primary rounded-pill px-4">Voir commentaire</a>
    <?php } ?>
 

@@ -111,18 +111,10 @@
                     <div class="col-lg-10">
 
                         <form class="shadow-lg rounded p-4 bg-white w-100" method="post" action="categorie.php">
-                            <div class="row gy-4"> 
+                            <div class="row gy-4">
+
                                 <div class="col-md-6">
-                                    <select name="nom" class="form-control">
-                                        <option>Technologie</option>
-                                        <option>Santé</option>
-                                        <option>Voyage</option>
-                                        <option>Cuisine</option>
-                                        <option>Sport</option>
-                                        <option>Éducation</option>
-                                        <option>Finance</option>
-                                        <option>Mode</option>
-                                    </select>
+                                    <input type="text" name="nom" class="form-control" placeholder="Nom" required>
                                 </div>
 
                                 <div class="col-md-12">

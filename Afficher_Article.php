@@ -1,11 +1,34 @@
 <?php
   session_start();
   require_once 'include/db.php';
-  $article=$db->query('SELECT a.id AS article_id , a.title, a.content , a.created_at, a.image_url, a.status, c.name AS categorie
-               FROM article a
-               JOIN categorie c ON a.category_id = c.id'
-  )->fetchAll(PDO::FETCH_ASSOC);
+$id = $_GET['article_id'] ?? null; 
+if(!$id){
+    die("Article non trouvé");
+}
+
+
+$stmt = $db->prepare("SELECT a.id AS article_id, a.title, a.content, a.created_at, a.image_url, a.status, c.name AS categorie
+                      FROM article a
+                      JOIN categorie c ON a.category_id = c.id
+                      WHERE a.id = ?");
+$stmt->execute([$id]);
+$article = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if(!$article){
+    die("Article non trouvé");
+}
+
+
+$stmt2 = $db->prepare("SELECT c.idc, u.username, c.content, c.status
+                       FROM commentaire c
+                       JOIN utilisateur u ON c.idU = u.id
+                       WHERE c.art_id = ?
+                       ORDER BY c.idc DESC"); 
+$stmt2->execute([$id]);
+$commentaire = $stmt2->fetchAll(PDO::FETCH_ASSOC); 
+
 ?>
+
 
 
 
@@ -95,52 +118,46 @@
         </div>
     </nav>
   <div class="container my-5">
-    <?php  foreach($article as $art):?>
-     <!-- Card Article 1 -->
-    <div class="card mb-4">
-       <img 
-  src="<?php echo !empty($art['image_url']) ? $art['image_url'] : 'img/default.jpg'; ?>" 
-  class="card-img-top"
->
 
-        <div class="card-body d-flex flex-column">
-            <h5 class="card-title">Titre : <?php echo $art['title']?></h5>
-            <p class="card-text">contenu : <?php echo $art['content']?></p>
-            <p class="text-muted">categorie : <?php echo $art['categorie']?></p>
-            <p class="text-muted">date creation:<?php echo $art['created_at']?></p>
-           
-             
-            <!-- Boutons selon rôle -->
-            <div class="mt-auto">
-                <!-- Pour visiteur -->
-               
-                 <?php
-                  if ($_SESSION['role'] == 'auteur' || $_SESSION['role'] == 'admin') {
-                ?>
-                <!-- Pour auteur -->
-                <a href="modifier_article.php?edit=<?php echo $art['article_id'];?>" class="btn btn-warning btn-space">Modifier</a>
-                <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" class="btn btn-danger btn-space"
-                   onclick="return 
-             confirm('supprimer cet utilisateur ?')">
-             supprimer
-                </a>
-  <?php
-}
-?>
-                  <a  class="btn btn-success" href="commentaire.php?id=<?php echo $art['article_id']; ?>" >Ajouter commentaire</a>
-
-
-                
- 
-            </div>
-        </div>
-        <div class="card-footer text-muted">
-            <span>Statut :</span><?php echo $art['status'] ?>
-        </div>
+  <!-- Card Article -->
+  <div class="card mb-4">
+    <img src="<?= $article['image_url'] ?>" class="card-img-top" style="height:250px; object-fit:cover;">
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title">Titre : <?= $article['title'] ?></h5>
+      <p class="card-text"><?= $article['content'] ?></p>
+      <p class="text-muted">Categorie : <?= $article['categorie'] ?></p>
+      <p class="text-muted">Date creation : <?= $article['created_at'] ?></p>
     </div>
-    <?php endforeach?>
-
+    <div class="card-footer text-muted">
+      Statut : <?= $article['status'] ?>
+      <a class="btn btn-success btn-sm float-end" href="commentaire.php?id=<?= $article['article_id'] ?>">Ajouter commentaire</a>
+    </div>
   </div>
+              <div class="table-responsive bg-white p-3 rounded shadow">
+  <table class="table table-bordered table-hover align-middle mb-0 text-dark">
+    <thead class="table-light">
+      <tr>
+        <th>Username</th>
+        <th>Contenu</th>
+       
+      
+      </tr>
+    </thead>
+    <tbody class="table-white">
+      <?php foreach($commentaire as $elm): ?>
+        <tr>
+          <td><?php echo($elm['username']); ?></td>
+          <td><?php echo($elm['content']); ?></td>
+          
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+
+
+
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
