@@ -58,13 +58,13 @@
 
  
                if ($user['role'] == 'admin') {
-                      header('Location: espaceAdmin.php');
+                      header('Location:Home.php');
                            exit;
                } elseif ($user['role'] == 'auteur') {
-                      header('Location:Article.php');
+                      header('Location:Home.php');
                          exit;
                 } else { 
-                     header('Location:Afficher_Article.php');
+                     header('Location:Home.php');
                      exit;
     }
               } else {

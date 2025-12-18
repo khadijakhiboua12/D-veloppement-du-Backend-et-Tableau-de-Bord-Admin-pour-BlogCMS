@@ -1,11 +1,14 @@
 <?php
   session_start();
   require_once 'include/db.php';
-$id = $_GET['article_id'] ?? null; 
+$id = $_GET['article_id']; 
 if(!$id){
     die("Article non trouvé");
 }
-
+$id = $_GET['article_id'] ?? null;
+if (!$id) {
+    die("Article non trouvé");
+}
 
 $stmt = $db->prepare("SELECT a.id AS article_id, a.title, a.content, a.created_at, a.image_url, a.status, c.name AS categorie
                       FROM article a
@@ -21,7 +24,7 @@ if(!$article){
 
 $stmt2 = $db->prepare("SELECT c.idc, u.username, c.content, c.status
                        FROM commentaire c
-                       JOIN utilisateur u ON c.idU = u.id
+                      left  JOIN utilisateur u ON c.idU = u.id
                        WHERE c.art_id = ?
                        ORDER BY c.idc DESC"); 
 $stmt2->execute([$id]);
@@ -89,37 +92,53 @@ $commentaire = $stmt2->fetchAll(PDO::FETCH_ASSOC);
       background-c
       color: #f8f9fa;
     }
+
+
+
+
+    
   </style>
 
  <body class="d-flex flex-column vh-100">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="Home.php">BlogCMS</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <!-- ✅ NAVBAR PROPRE W FULL WIDTH -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm w-100">
-        <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
+       
+<li class="nav-item"><a class="nav-link" href="Home.php">Accueil</a></li>        
+        <?php if(isset($_SESSION['role'])): ?>
+            <?php if($_SESSION['role'] == 'admin'): ?>
+                <li class="nav-item"><a class="nav-link" href="categorie.php">Categorie</a></li>
+                 <li class="nav-item"><a class="nav-link" href="espaceAdmin.php">Dashbord</a></li>
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+               
+            <?php elseif($_SESSION['role'] == 'auteur'): ?>
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+            <?php endif; ?>
+        <?php else: ?>
            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <li class="nav-item"><a class="nav-link" href="signin.php">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link" href="signup.php">S’inscrire</a></li>
+        <?php endif; ?>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-                </ul>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-success">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+
+
   <div class="container my-5">
 
-  <!-- Card Article -->
+ 
   <div class="card mb-4">
     <img src="<?= $article['image_url'] ?>" class="card-img-top" style="height:250px; object-fit:cover;">
     <div class="card-body d-flex flex-column">
@@ -133,28 +152,44 @@ $commentaire = $stmt2->fetchAll(PDO::FETCH_ASSOC);
       <a class="btn btn-success btn-sm float-end" href="commentaire.php?id=<?= $article['article_id'] ?>">Ajouter commentaire</a>
     </div>
   </div>
-              <div class="table-responsive bg-white p-3 rounded shadow">
-  <table class="table table-bordered table-hover align-middle mb-0 text-dark">
-    <thead class="table-light">
-      <tr>
-        <th>Username</th>
-        <th>Contenu</th>
-       
-      
-      </tr>
-    </thead>
-    <tbody class="table-white">
-      <?php foreach($commentaire as $elm): ?>
-        <tr>
-          <td><?php echo($elm['username']); ?></td>
-          <td><?php echo($elm['content']); ?></td>
-          
-        </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-</div>
+              <div class="container my-4">
+  <?php foreach($commentaire as $elm): ?>
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
 
+      
+        <div class="d-flex justify-content-between align-items-center">
+          <h6 class="card-subtitle text-primary fw-bold mb-2">
+            <i class="bi bi-person-circle"></i>
+            <?php echo isset($elm['username']) ? $elm['username'] : 'Visiteur'; ?>
+          </h6>
+
+        
+          <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+            <div>
+              <a href="modifier_commentaire.php?edit=<?php echo $elm['idc'] .  '&article_id='  .$article['article_id']; ?>"
+                 class="btn btn-sm btn-warning">
+                 Modifier
+              </a>
+              <a href="supprimer_commentaire.php?delete=<?php echo $elm['idc'] .'&article_id='  .$article['article_id']; ?>"
+                 class="btn btn-sm btn-danger"
+                 onclick="return confirm('est ce supprimer ')">
+                 Supprimer
+              </a>
+            </div>
+          <?php endif; ?>
+        </div>
+
+
+       
+        <p class="card-text mt-2">
+          <?php echo nl2br(htmlspecialchars($elm['content'])); ?>
+        </p>
+
+      </div>
+    </div>
+  <?php endforeach; ?>
+</div>
 
 
   

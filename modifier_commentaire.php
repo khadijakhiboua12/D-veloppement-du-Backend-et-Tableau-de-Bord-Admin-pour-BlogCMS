@@ -1,6 +1,7 @@
 <?php
 
 require_once 'include/db.php';
+session_start();
   if(isset($_GET['edit'])){
     $id=$_GET['edit'];
     $cm=$db->prepare("select * from commentaire where idc=?");
@@ -12,11 +13,13 @@ require_once 'include/db.php';
     $id = $_POST['idc'];
     $contenu = $_POST['content'];
     $idU=$_SESSION['id'];
-    $status = $_POST['status'];
-    if (!empty($contenu)    && !empty($status)) {
-       $update = $db->prepare("update commentaire  SET content=?, status=? where idc=? ");
-       $update->execute([$contenu, $status, $id]);
-      header("Location: Afficher_commentaire.php");
+    $article_id = $_GET['article_id'];
+    
+    if (!empty($contenu) ) {
+       $update = $db->prepare("update commentaire  SET content=? where idc=? ");
+       $update->execute([$contenu ,$id]);
+       header("Location: Afficher_Article.php?article_id=".$article_id );
+
       exit;    
 }
 }
@@ -98,30 +101,41 @@ select.form-control {
 
  <body class="d-flex flex-column vh-100">
 
-    <!-- ✅ NAVBAR PROPRE W FULL WIDTH -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm w-100">
-        <div class="container-fluid">
-           
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+ <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="Home.php">BlogCMS</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                   <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-                </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-success">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-   <!-- FORM CENTER -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
+     
+<li class="nav-item"><a class="nav-link" href="Home.php">Accueil</a></li>        
+        <?php if(isset($_SESSION['role'])): ?>
+            <?php if($_SESSION['role'] == 'admin'): ?>
+                <li class="nav-item"><a class="nav-link" href="categorie.php">Categorie</a></li>
+           <li class="nav-item"><a class="nav-link" href="espaceAdmin.php">Dashbord</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+            <?php elseif($_SESSION['role'] == 'auteur'): ?>
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+            <?php endif; ?>
+        <?php else: ?>
+          
+            <li class="nav-item"><a class="nav-link" href="signin.php">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link" href="signup.php">S’inscrire</a></li>
+        <?php endif; ?>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- FORM CENTER -->
 <div class="d-flex justify-content-center align-items-center flex-grow-1">
     <section id="contact" class="w-100">
         <div class="container">
@@ -129,36 +143,25 @@ select.form-control {
                 <div class="col-lg-10">
 
                     <!-- Titre -->
-<h2 class="text-center mb-4" style="color: #fff;">Modifier commentaire</h2>
-<form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
-   <input type="hidden" name="idc" value="<?php echo $commentaire['idc']; ?>">
+                    <h2 class="text-center mb-4" style="color: #fff;">Modifier commentaire</h2>
+                    <form class="bg-dark shadow p-4 rounded" method="post" style="border: 2px solid #fff; border-radius: 10px;">
+                        <input type="hidden" name="idc" value="<?php echo $commentaire['idc']; ?>">
 
-    <div class="mb-3">
-        <label style="color: #fff;">Content</label>
-        <textarea name="content" class="form-control" rows="6" required><?php echo  $commentaire['content'];?></textarea>
-    </div>
-    <div class="mb-3">
-        <label style="color: #fff;">Status</label>
-    <select name="status" class="form-control" required>
-        <option value="pending"<?php echo($commentaire['status']=='pending')?'selected' : '' ;?>>pending</option>
-        <option value="approved"<?php echo($commentaire['status']=='approved')?'selected ' :'' ;?>> approved</option>
-        <option value="rejected"<?php echo($commentaire['status']=='rejected')? 'selected' : '' ;?>>rejected</option>
-        <option value="spam"<?php echo($commentaire['status']=='spam')? 'selected' : '';?>>spam</option>
-    </select>
+                        <div class="mb-3">
+                            <label style="color: #fff;">Content</label>
+                            <textarea name="content" class="form-control" rows="6" required><?php echo  $commentaire['content'];?></textarea>
+                        </div>
 
-    </div>
-     <button type="submit" name="modifier" class="btn btn-success">Modifier</button>
-      <a href="Afficher_commentaire.php" class="btn btn-secondary">Annuler</a>
-
-</form>
-
-
+                        <button type="submit" name="modifier" class="btn btn-success">Modifier</button>
+                        <a href="Afficher_commentaire.php" class="btn btn-secondary">Annuler</a>
+                    </form>
 
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

@@ -35,10 +35,30 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#about">Acceuil</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                      <ul class="navbar-nav me-auto">
+    <ul class="navbar-nav me-auto">
+    <li class="nav-item"><a class="nav-link" href="Home.php">Accueil</a></li>
+
+    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'auteur')): ?>
+        <li class="nav-item"><a class="nav-link" href="Article.php">Articles</a></li>
+        <li class="nav-item"><a class="nav-link" href="logout.php">Déconnecter</a></li>
+
+    <?php endif; ?>
+
+    <?php if(isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
+        <li class="nav-item"><a class="nav-link" href="Categorie.php">Catégorie</a></li>
+        <li class="nav-item"><a class="nav-link" href="espaceAdmin.php">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="logout.php">Déconnecter</a></li>
+    <?php endif; ?>
+
+    <?php if(!isset($_SESSION['role'])): ?>
+        <li class="nav-item"><a class="nav-link" href="signin.php">Connexion</a></li>
+        <li class="nav-item"><a class="nav-link" href="signup.php">S’inscrire</a></li>
+    <?php endif; ?>
+</ul>
+
+
+
                     </ul>
                 </div>
             </div>
@@ -83,21 +103,22 @@
               <p class="text-muted">date creation : <?php echo $art['created_at']; ?></p>
 
               <div class="mt-auto">
-                <?php if ($_SESSION['role']=='auteur' || $_SESSION['role']=='admin'): ?>
-                  <a href="modifier_article.php?edit=<?php echo $art['article_id'];?>" class="btn btn-warning btn-sm">Modifier</a>
-                  <a href="supprimer_article.php?delete=<?php echo $art['article_id'];?>" 
-                     class="btn btn-danger btn-sm"
-                     onclick="return confirm('supprimer cet article ?')">
-                     Supprimer
-                  </a>
-                <?php endif; ?>
+    <?php if(isset($_SESSION['role']) && ($_SESSION['role'] == 'auteur' || $_SESSION['role'] == 'admin')): ?>
+        <a href="modifier_article.php?edit=<?= $art['article_id']; ?>" class="btn btn-warning btn-sm">Modifier</a>
+        <a href="supprimer_article.php?delete=<?= $art['article_id']; ?>" 
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('supprimer cet article ?')">
+           Supprimer
+        </a>
+    <?php endif; ?>
 
-                <a class="btn btn-success btn-sm"
-                   href="Afficher_Article.php?article_id=<?php echo $art['article_id']; ?>">
-                Lire Plus
-                </a>
-              </div>
-            </div>
+    <a class="btn btn-success btn-sm"
+       href="Afficher_Article.php?article_id=<?= $art['article_id']; ?>">
+       Lire Plus
+    </a>
+    
+</div>
+    </div>
 
             <div class="card-footer text-muted">
               Statut : <?php echo $art['status']; ?>

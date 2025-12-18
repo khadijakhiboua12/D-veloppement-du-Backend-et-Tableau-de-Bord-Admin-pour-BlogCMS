@@ -102,7 +102,7 @@
          $insert->execute([$username, $hashPassword,$email, $role]);
          
           if($role ==='auteur'){
-                header("location:Afficher_Article.php");
+                header("location:Home.php");
                       exit;
         }
     }

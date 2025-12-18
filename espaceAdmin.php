@@ -66,8 +66,8 @@
                     </div>
                 </div>
     <div class="navbar-nav w-100 d-flex flex-column gap-2">
-         <a href="espaceAdmin.php" class="nav-item nav-link active">
-      <i class="fa fa-users me-3"></i> Utilisateurs
+         <a href="Home.php" class="nav-item nav-link active">
+      <i class="fa fa-users me-3"></i> Acceuil
 
     </a>
     <a href="Afficher_Article.php" class="nav-item nav-link active">
@@ -76,9 +76,7 @@
     <a href="Afficher_categorie.php" class="nav-item nav-link active">
          <i class="fa fa-list me-3"></i> Catégories
     </a>
-    <a href="Afficher_commentaire.php" class="nav-item nav-link active">
-        <i class="fa fa-comment me-3"></i> Commentaires
-    </a>
+    
    
 </div>
 
@@ -88,28 +86,7 @@
         <!-- Content -->
         <div class="content">
             <!-- Navbar -->
-           <!-- ✅ NAVBAR PROPRE W FULL WIDTH -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm w-100">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                   
-                    <li class="nav-item"><a class="nav-link" href="Categorie.php">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="commentaire.php">Déconnecte</a></li>
-                </ul>
-
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-success">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
             <!-- Statistiques -->
   <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
@@ -170,10 +147,6 @@
 
 
 
-
-
-
-            <!-- Gestion utilisateurs -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <h3 class="mb-4">Gestion des utilisateurs</h3>

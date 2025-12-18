@@ -105,28 +105,39 @@ select.form-control {
  <body class="d-flex flex-column vh-100">
 
     <!-- ✅ NAVBAR PROPRE W FULL WIDTH -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm w-100">
-        <div class="container-fluid">
-           
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="Home.php">BlogCMS</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                   <li class="nav-item"><a class="nav-link active" href="Afficher_Article.php"> Articels</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_categorie.php"> Categorie</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Afficher_commentaire.php">Commentaire</a></li>
-                    <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
-                </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search">
-                    <button class="btn btn-outline-success">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        
+       
+<li class="nav-item"><a class="nav-link" href="Home.php">Accueil</a></li>        
+        <?php if(isset($_SESSION['role'])): ?>
+            <?php if($_SESSION['role'] == 'admin'): ?>
+                <li class="nav-item"><a class="nav-link" href="categorie.php">Categorie</a></li>
+                 <li class="nav-item"><a class="nav-link" href="espaceAdmin.php">Dashbord</a></li>
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+            <?php elseif($_SESSION['role'] == 'auteur'): ?>
+                <li class="nav-item"><a class="nav-link" href="logout.php">Deconnecte</a></li>
+            <?php endif; ?>
+        <?php else: ?>
+           
+            <li class="nav-item"><a class="nav-link" href="signin.php">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link" href="signup.php">S’inscrire</a></li>
+        <?php endif; ?>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
    <!-- FORM CENTER -->
 <div class="d-flex justify-content-center align-items-center flex-grow-1">
     <section id="contact" class="w-100">
